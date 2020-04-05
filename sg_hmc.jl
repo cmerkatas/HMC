@@ -37,20 +37,6 @@ function leapfrog!(z::HMCState, gradU::Function, gradK::Function)
     return nothing
 end
 
-#q = zeros(2)
-#p = ones(2)
-q, p, step_size, num_steps = 0.0,1.0, 0.1, 10
-x = HMCState(q, p, step_size, num_steps)
-
-U(x) = x^2 / 2
-K(x) = x^2 / 2
-∇U(x) = gradient(U, x)[1]     # numerical gradient
-∇K(x) = gradient(K, x)[1]     # numerical gradient
-
-H(x, y) = U(x) + K(y)
-
-leapfrog!(x, ∇U, ∇K)
-
 function sg_hmc!(state::HMCState, U::Function, gradU::Function,
                 K::Function, gradK::Function; masses=Float64[])
 
@@ -98,43 +84,5 @@ end
 @time samples = test_hmc()
 
 histogram(samples)
-
-
 mean(samples)
 std(samples)
-
-
-
-
-U(x) = x^2 / 2
-∇U(x) = gradient(U, x)[1]     # numerical gradient
-
-H(x, y) = U(x) + K(y)
-
-
-x = range(-1, 1, length=100)
-y = range(-1, 1, length=100)
-
-contour(x,y, (x,y) -> H.(x,y), levels=1, color=:blue); xlims!((-2,2)); ylims!((-2,2))
-
-
-function test_leapfrog(ϵ, L)
-    q,p=0.0,1.0
-    z = HMCState(q, p)
-
-    K(x) = x^2 / 2
-    ∇K(x) = gradient(K, x)[1]      # numerical gradient
-
-    U(x) = x^2 / 2
-    ∇U(x) = gradient(U, x)[1]
-    P = zeros(L)
-    Q = zeros(L)
-    for i in 1:1:L
-        leapfrog!(z, ∇U, ∇K, ϵ, L)
-        P[i]=z.momentum
-        Q[i]=z.position
-    end
-    return P,Q
-end
-
-P,Q = test_leapfrog(0.5,20)
