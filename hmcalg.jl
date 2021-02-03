@@ -43,6 +43,7 @@ end
 function hmcstep!(z::HMCState, U::Function, ∂U::Function, K::Function, ∂K::Function)
 
     current_q = z.q
+    z.p = rand(MvNormal(zeros(length(current_q)), z.M))
     current_p = z.p
 
     # new state according to leapfrom for hamilton dynamics
@@ -65,7 +66,7 @@ end
 # run it for the funnel distribution
 include("funnel.jl")
 # define the state
-z = HMCState(ones(2), 0.05, 2)
+z = HMCState(ones(2), 0.025, 4)
 M = z.M
 # The potential U and ∂U are given from l and ∇l
 # define the kinetic energy K = p^⊤ Minv p / 2 i.e a multivariate Normal
@@ -73,8 +74,8 @@ K(p) = p' * M * p / 2
 ∂K(p) = M \ p
 hmcstep!(z, l, ∇l, K, ∂K)
 
-ns = 1000
-Random.seed!(2)
+ns = 500
+Random.seed!(1)
 samples=zeros(2, ns)
 for s in 1:1:ns
     hmcstep!(z, l, ∇l, K, ∂K)
