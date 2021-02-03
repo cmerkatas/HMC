@@ -26,5 +26,5 @@ function dldx(x)
     return q, grad
 end
 
-l(ones(2)), ∇l(ones(2))
-q, grad = dldx(ones(2))
+# l(ones(2)), ∇l(ones(2))
+# q, grad = dldx(ones(2))
