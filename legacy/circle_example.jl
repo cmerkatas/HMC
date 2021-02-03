@@ -142,10 +142,10 @@ Z = [pdf(MvNormal(μ, Σ), [x,y]) for x in x_range, y in y_range]
 contour(x_range, y_range, Z)
 plot!(samples[:,1], samples[:,2], color="red")
 
+using GeometryBasics
 heatmap(x_range, y_range, Z, color=:deep)
 plot!(Point2.(eachcol(samples')), color="red", label="samples")
 
-using GeometryBasics
 anim = @gif for i=1:10:1000
     scatter!(samples[i,1], samples legend=nothing, color="blue")
 end every 5
