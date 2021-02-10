@@ -43,5 +43,5 @@ function test_leapfrog(ϵ, L)
     return P,Q
 end
 
-P,Q = test_leapfrog(0.5,20)
+@time P,Q = test_leapfrog(0.5,20)
 scatter!(P,Q,legend=nothing)
