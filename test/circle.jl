@@ -4,7 +4,7 @@ using Turing: MvNormal
 using StatsBase
 
 # run it for the funnel distribution
-include("hmc.jl")
+include("../hmc.jl")
 # example of leapfrog on h(q,p) = q^2/2 + p^2/2
 H(q, p) = q.^2 / 2  + p.^2 / 2
 U(q) = q^2 / 2
@@ -13,6 +13,10 @@ function ∂U(q)
     u, lambda = Zygote.pullback(U, q)
     grad = first(lambda(1))
     return grad
+end
+
+function ∂∂U(q)
+    Zygote.hessian(U, q)
 end
 
 function ∂K(p)
